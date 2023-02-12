@@ -1,6 +1,6 @@
 // import PropTypes from 'prop-types';
 
-export const SearchBar = () => {
+export const SearchBar = ({ onSubmit }) => {
   return (
     <header className="searchbar">
       <form className="form">
@@ -9,6 +9,7 @@ export const SearchBar = () => {
         </button>
 
         <input
+          onSubmit={onSubmit}
           className="input"
           type="text"
           autoComplete="off"
