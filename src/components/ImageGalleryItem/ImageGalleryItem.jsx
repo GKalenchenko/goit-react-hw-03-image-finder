@@ -8,7 +8,6 @@ export class ImageGalleryItem extends Component {
 
   render() {
     const { images } = this.props;
-    console.log(images);
     return (
       <>
         {images.map(image => {
