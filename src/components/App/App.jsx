@@ -12,19 +12,18 @@ export class App extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    this.setState({ inputValue: e.target.value });
-    console.log(this.state.inputValue);
+    this.setState({ inputValue: e.target[1].value });
   };
 
   render() {
     return (
-      <>
+      <Wrapper>
         <SearchBar onSubmit={this.onSubmit} />
-        <ImageGallery>
+        <ImageGallery inputValue={this.state.inputValue}>
           <ImageGalleryItem />
         </ImageGallery>
         <Loader />
-      </>
+      </Wrapper>
     );
   }
 }

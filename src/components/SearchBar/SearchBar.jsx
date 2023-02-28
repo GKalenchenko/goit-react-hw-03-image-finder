@@ -1,22 +1,27 @@
 // import PropTypes from 'prop-types';
 
+import {
+  SearchWrapper,
+  SearchButton,
+  SearchForm,
+  SearchInput,
+  SearchButtonLabel,
+} from './SearchBar.styled';
+
 export const SearchBar = ({ onSubmit }) => {
   return (
-    <header className="searchbar">
-      <form className="form">
-        <button type="submit" className="button">
-          <span className="button-label">Search</span>
-        </button>
-
-        <input
-          onSubmit={onSubmit}
+    <SearchWrapper className="searchbar">
+      <SearchForm className="form" onSubmit={onSubmit}>
+        <SearchButton type="submit" className="button" />
+        <SearchButtonLabel class="button-label">Search</SearchButtonLabel>
+        <SearchInput
           className="input"
           type="text"
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
         />
-      </form>
-    </header>
+      </SearchForm>
+    </SearchWrapper>
   );
 };
