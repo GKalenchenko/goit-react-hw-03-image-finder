@@ -4,6 +4,7 @@ import { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'components/Button/Button';
 import { ImageList } from './ImageGallery.styled';
+import { InfinitySpin } from 'react-loader-spinner';
 
 const BASE_URL = 'https://pixabay.com/api/';
 
@@ -36,14 +37,11 @@ export class ImageGallery extends Component {
   }
 
   async componentDidUpdate({ inputValue }, { currentPage, response }) {
-    console.log(this.props.inputValue !== inputValue);
-    if (
-      this.state.currentPage !== currentPage ||
-      this.props.inputValue !== inputValue
-    ) {
+    if (this.state.currentPage !== currentPage) {
       try {
+        this.setState({ isLoading: true });
         const response = await axios.get(
-          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&key=32008820-29a82a4a3d033faa63b9c6371&image_type=photo&orientation=horizontal&per_page=12'`
+          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&key=32008820-29a82a4a3d033faa63b9c6371&image_type=photo&orientation=horizontal&per_page=5'`
         );
         this.setState(prev => {
           return { response: [...prev.response, ...response.data.hits] };
@@ -55,17 +53,14 @@ export class ImageGallery extends Component {
       }
     }
 
-    if (
-      this.state.currentPage === currentPage &&
-      this.props.inputValue !== inputValue
-    ) {
+    if (this.props.inputValue !== inputValue) {
+      this.setState({ currentPage: 1 });
+      this.setState({ isLoading: true });
       try {
         const response = await axios.get(
-          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&key=32008820-29a82a4a3d033faa63b9c6371&image_type=photo&orientation=horizontal&per_page=12'`
+          `${BASE_URL}?q=${this.props.inputValue}&page=1&key=32008820-29a82a4a3d033faa63b9c6371&image_type=photo&orientation=horizontal&per_page=5'`
         );
-        this.setState(prev => {
-          return { response: [...response.data.hits] };
-        });
+        this.setState({ response: [...response.data.hits] });
       } catch (error) {
         this.setState({ error });
       } finally {
@@ -85,8 +80,8 @@ export class ImageGallery extends Component {
             <ImageGalleryItem images={response} />
           </ImageList>
         )}
-        {isLoading && <p>Loading...</p>}
-        {!isLoading && <Button onClick={this.onClick} />}
+        {isLoading && <InfinitySpin width="200" color="#4fa94d" npm />}
+        {response.length > 0 && <Button onClick={this.onClick} />}
       </div>
     );
   }

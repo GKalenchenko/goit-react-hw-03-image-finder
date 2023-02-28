@@ -1,4 +1,5 @@
 // import PropTypes from 'prop-types';
+import { FcSearch } from 'react-icons/fc';
 
 import {
   SearchWrapper,
@@ -12,8 +13,10 @@ export const SearchBar = ({ onSubmit }) => {
   return (
     <SearchWrapper className="searchbar">
       <SearchForm className="form" onSubmit={onSubmit}>
-        <SearchButton type="submit" className="button" />
-        <SearchButtonLabel class="button-label">Search</SearchButtonLabel>
+        <SearchButton type="submit" className="button">
+          <FcSearch />
+        </SearchButton>
+        {/* <SearchButtonLabel>Search</SearchButtonLabel> */}
         <SearchInput
           className="input"
           type="text"
