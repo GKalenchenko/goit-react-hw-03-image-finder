@@ -13,3 +13,9 @@ export const ImageList = styled.ul`
   margin-right: auto;
   margin-bottom: 16px;
 `;
+
+export const FlexWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;

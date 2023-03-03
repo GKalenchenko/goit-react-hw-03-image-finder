@@ -6,7 +6,6 @@ import {
   SearchButton,
   SearchForm,
   SearchInput,
-  SearchButtonLabel,
 } from './SearchBar.styled';
 
 export const SearchBar = ({ onSubmit }) => {
@@ -16,7 +15,7 @@ export const SearchBar = ({ onSubmit }) => {
         <SearchButton type="submit" className="button">
           <FcSearch />
         </SearchButton>
-        {/* <SearchButtonLabel>Search</SearchButtonLabel> */}
+
         <SearchInput
           className="input"
           type="text"

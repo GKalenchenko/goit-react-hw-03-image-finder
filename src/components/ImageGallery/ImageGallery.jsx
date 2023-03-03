@@ -3,10 +3,13 @@ import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'components/Button/Button';
-import { ImageList } from './ImageGallery.styled';
+import { FlexWrapper, ImageList } from './ImageGallery.styled';
 import { InfinitySpin } from 'react-loader-spinner';
 
 const BASE_URL = 'https://pixabay.com/api/';
+const API_KEY = 'key=32008820-29a82a4a3d033faa63b9c6371';
+const API_IMG_TYPE = 'image_type=photo&orientation=horizontal';
+const API_IMG_PER_PAGE = 'per_page=3';
 
 export class ImageGallery extends Component {
   state = {
@@ -41,7 +44,7 @@ export class ImageGallery extends Component {
       try {
         this.setState({ isLoading: true });
         const response = await axios.get(
-          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&key=32008820-29a82a4a3d033faa63b9c6371&image_type=photo&orientation=horizontal&per_page=5'`
+          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&${API_KEY}&${API_IMG_TYPE}&${API_IMG_PER_PAGE}`
         );
         this.setState(prev => {
           return { response: [...prev.response, ...response.data.hits] };
@@ -58,7 +61,7 @@ export class ImageGallery extends Component {
       this.setState({ isLoading: true });
       try {
         const response = await axios.get(
-          `${BASE_URL}?q=${this.props.inputValue}&page=1&key=32008820-29a82a4a3d033faa63b9c6371&image_type=photo&orientation=horizontal&per_page=5'`
+          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&${API_KEY}&${API_IMG_TYPE}&${API_IMG_PER_PAGE}`
         );
         this.setState({ response: [...response.data.hits] });
       } catch (error) {
@@ -80,8 +83,10 @@ export class ImageGallery extends Component {
             <ImageGalleryItem images={response} />
           </ImageList>
         )}
-        {isLoading && <InfinitySpin width="200" color="#4fa94d" npm />}
-        {response.length > 0 && <Button onClick={this.onClick} />}
+        <FlexWrapper>
+          {isLoading && <InfinitySpin width="200" color="#000080" npm />}
+          {response.length > 0 && <Button onClick={this.onClick} />}
+        </FlexWrapper>
       </div>
     );
   }
