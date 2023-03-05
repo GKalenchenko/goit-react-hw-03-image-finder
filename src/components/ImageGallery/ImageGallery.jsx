@@ -9,7 +9,7 @@ import { InfinitySpin } from 'react-loader-spinner';
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = 'key=32008820-29a82a4a3d033faa63b9c6371';
 const API_IMG_TYPE = 'image_type=photo&orientation=horizontal';
-const API_IMG_PER_PAGE = 'per_page=3';
+const API_IMG_PER_PAGE = 'per_page=12';
 
 export class ImageGallery extends Component {
   state = {
@@ -19,7 +19,7 @@ export class ImageGallery extends Component {
     currentPage: 1,
   };
 
-  onClick = evt => {
+  onClick = () => {
     this.setState(prevState => {
       return { currentPage: prevState.currentPage + 1 };
     });
@@ -39,7 +39,23 @@ export class ImageGallery extends Component {
     // }
   }
 
-  async componentDidUpdate({ inputValue }, { currentPage, response }) {
+  async componentDidUpdate({ inputValue }, { currentPage }) {
+    console.log(this.props.inputValue !== inputValue);
+    if (this.props.inputValue !== inputValue) {
+      this.setState({ currentPage: 1 });
+      this.setState({ isLoading: true });
+      try {
+        const response = await axios.get(
+          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&${API_KEY}&${API_IMG_TYPE}&${API_IMG_PER_PAGE}`
+        );
+        this.setState({ response: [...response.data.hits] });
+      } catch (error) {
+        this.setState({ error });
+      } finally {
+        this.setState({ isLoading: false });
+      }
+    }
+
     if (this.state.currentPage !== currentPage) {
       try {
         this.setState({ isLoading: true });
@@ -49,21 +65,6 @@ export class ImageGallery extends Component {
         this.setState(prev => {
           return { response: [...prev.response, ...response.data.hits] };
         });
-      } catch (error) {
-        this.setState({ error });
-      } finally {
-        this.setState({ isLoading: false });
-      }
-    }
-
-    if (this.props.inputValue !== inputValue) {
-      this.setState({ currentPage: 1 });
-      this.setState({ isLoading: true });
-      try {
-        const response = await axios.get(
-          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&${API_KEY}&${API_IMG_TYPE}&${API_IMG_PER_PAGE}`
-        );
-        this.setState({ response: [...response.data.hits] });
       } catch (error) {
         this.setState({ error });
       } finally {

@@ -1,27 +1,45 @@
 // import PropTypes from 'prop-types';
-
 import { Modal } from 'components/Modal/Modal';
 import { Component } from 'react';
 import { GalleryImage, GalleryItem } from './ImageGalleryItem.styled';
 
 export class ImageGalleryItem extends Component {
   state = {
-    isModalOpen: false,
+    largeImage: null,
+    alt: null,
+  };
+
+  setModalImg = (url, alt) => {
+    this.setState({ largeImage: url });
+    this.setState({ alt });
   };
 
   render() {
+    const { largeImage, alt } = this.state;
     const { images } = this.props;
+
     return (
       <>
-        {images.map(image => {
-          const { id, tags, webformatURL, largeImageURL } = image;
+        {images.map(({ id, tags, webformatURL, largeImageURL }, idx) => {
           return (
-            <GalleryItem className="gallery-item" key={id}>
+            <GalleryItem
+              className="gallery-item"
+              key={idx}
+              onClick={() => {
+                this.setModalImg(largeImageURL, tags);
+              }}
+            >
               <GalleryImage src={webformatURL} alt={tags} />
-              <Modal largeImage={largeImageURL} alt={tags} />
             </GalleryItem>
           );
         })}
+        {largeImage && (
+          <Modal
+            largeImage={largeImage}
+            setModal={this.setModalImg}
+            alt={alt}
+          />
+        )}
       </>
     );
   }
