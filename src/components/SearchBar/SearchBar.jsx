@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { FcSearch } from 'react-icons/fc';
 
 import {
@@ -26,4 +26,8 @@ export const SearchBar = ({ onSubmit }) => {
       </SearchForm>
     </SearchWrapper>
   );
+};
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };

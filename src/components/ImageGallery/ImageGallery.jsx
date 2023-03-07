@@ -1,10 +1,10 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'components/Button/Button';
 import { FlexWrapper, ImageList } from './ImageGallery.styled';
-import { InfinitySpin } from 'react-loader-spinner';
+import { Loader } from 'components/Loader/Loader';
 
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = 'key=32008820-29a82a4a3d033faa63b9c6371';
@@ -17,12 +17,6 @@ export class ImageGallery extends Component {
     error: null,
     response: [],
     currentPage: 1,
-  };
-
-  onClick = () => {
-    this.setState(prevState => {
-      return { currentPage: prevState.currentPage + 1 };
-    });
   };
 
   async componentDidMount() {
@@ -39,14 +33,13 @@ export class ImageGallery extends Component {
     // }
   }
 
-  async componentDidUpdate({ inputValue }, { currentPage }) {
-    console.log(this.props.inputValue !== inputValue);
-    if (this.props.inputValue !== inputValue) {
-      this.setState({ currentPage: 1 });
+  async componentDidUpdate(prevProps, { currentPage }) {
+    if (this.props.inputValue !== prevProps.inputValue) {
       this.setState({ isLoading: true });
+      this.setState({ currentPage: 1 });
       try {
         const response = await axios.get(
-          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&${API_KEY}&${API_IMG_TYPE}&${API_IMG_PER_PAGE}`
+          `${BASE_URL}?q=${this.props.inputValue}&page=1&${API_KEY}&${API_IMG_TYPE}&${API_IMG_PER_PAGE}`
         );
         this.setState({ response: [...response.data.hits] });
       } catch (error) {
@@ -56,28 +49,36 @@ export class ImageGallery extends Component {
       }
     }
 
-    if (this.state.currentPage !== currentPage) {
-      try {
-        this.setState({ isLoading: true });
-        const response = await axios.get(
-          `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&${API_KEY}&${API_IMG_TYPE}&${API_IMG_PER_PAGE}`
-        );
-        this.setState(prev => {
-          return { response: [...prev.response, ...response.data.hits] };
-        });
-      } catch (error) {
-        this.setState({ error });
-      } finally {
-        this.setState({ isLoading: false });
+    if (this.state.currentPage !== 1) {
+      if (this.state.currentPage !== currentPage) {
+        try {
+          this.setState({ isLoading: true });
+          const response = await axios.get(
+            `${BASE_URL}?q=${this.props.inputValue}&page=${this.state.currentPage}&${API_KEY}&${API_IMG_TYPE}&${API_IMG_PER_PAGE}`
+          );
+          this.setState(prev => {
+            return { response: [...prev.response, ...response.data.hits] };
+          });
+        } catch (error) {
+          this.setState({ error });
+        } finally {
+          this.setState({ isLoading: false });
+        }
       }
     }
   }
+
+  onClick = () => {
+    this.setState(prevState => {
+      return { currentPage: prevState.currentPage + 1 };
+    });
+  };
 
   render() {
     const { isLoading, error, response } = this.state;
 
     return (
-      <div>
+      <>
         {error && <p>Something went wrong please try again</p>}
         {response.length > 0 && (
           <ImageList className="gallery">
@@ -85,10 +86,14 @@ export class ImageGallery extends Component {
           </ImageList>
         )}
         <FlexWrapper>
-          {isLoading && <InfinitySpin width="200" color="#000080" npm />}
+          {isLoading && <Loader />}
           {response.length > 0 && <Button onClick={this.onClick} />}
         </FlexWrapper>
-      </div>
+      </>
     );
   }
 }
+
+ImageGallery.propTypes = {
+  inputValue: PropTypes.string.isRequired,
+};

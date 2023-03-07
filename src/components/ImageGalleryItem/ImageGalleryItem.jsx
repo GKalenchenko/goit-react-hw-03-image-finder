@@ -1,4 +1,4 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { Modal } from 'components/Modal/Modal';
 import { Component } from 'react';
 import { GalleryImage, GalleryItem } from './ImageGalleryItem.styled';
@@ -20,7 +20,7 @@ export class ImageGalleryItem extends Component {
 
     return (
       <>
-        {images.map(({ id, tags, webformatURL, largeImageURL }, idx) => {
+        {images.map(({ tags, webformatURL, largeImageURL }, idx) => {
           return (
             <GalleryItem
               className="gallery-item"
@@ -44,3 +44,7 @@ export class ImageGalleryItem extends Component {
     );
   }
 }
+
+ImageGalleryItem.propTypes = {
+  response: PropTypes.arrayOf(PropTypes.object),
+};

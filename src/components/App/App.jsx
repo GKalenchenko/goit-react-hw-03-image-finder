@@ -1,6 +1,5 @@
 import { ImageGallery } from 'components/ImageGallery/ImageGallery';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
-import { Loader } from 'components/Loader/Loader';
 import { SearchBar } from 'components/SearchBar/SearchBar';
 import { Component } from 'react';
 import { Wrapper } from './App.styled';
@@ -22,7 +21,6 @@ export class App extends Component {
         <ImageGallery inputValue={this.state.inputValue}>
           <ImageGalleryItem />
         </ImageGallery>
-        <Loader />
       </Wrapper>
     );
   }
